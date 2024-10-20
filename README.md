@@ -2,7 +2,8 @@
 
 This application allows users to manage their expenses and view summaries through a REST API. The application includes user authentication and token-based access control (JWT). Users can register, log in, and manage their expenses, which are stored in a database. The project also provides functionality for viewing total expenses, filtering by month, and refreshing authentication tokens.
 
-project idea: https://roadmap.sh/projects/expense-tracker-api
+project idea:
+https://roadmap.sh/projects/expense-tracker-api
 
 ## Main Features
 1. Expense Management (CRUD Operations)
