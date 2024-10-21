@@ -1,5 +1,5 @@
 from typing import Type
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from fastapi import HTTPException, status
 from sqlalchemy import func
@@ -48,3 +48,43 @@ def get_summary_during_month(db: Session, month_number: int, user_id: int) -> fl
         func.extract('month', Expense.date) == month_number
     ).all()
     return sum(expense.amount for expense in user_expenses)
+
+
+def get_summary_per_past_week(db: Session, user_id: int) -> list[Type[Expense]]:
+    today = datetime.now().date()
+    week_ago = today - timedelta(days=7)
+
+    user_expenses = db.query(Expense).filter(
+        Expense.user_id == user_id,
+        Expense.date.between(week_ago, today)
+    ).all()
+
+    return user_expenses
+
+
+def get_summary_per_past_month(db: Session, user_id: int) -> list[Type[Expense]]:
+    today = datetime.now().date()
+    first_day_of_month = today.replace(day=1)
+    previous_month_last_day = first_day_of_month - timedelta(days=1)
+    previous_month_first_day = previous_month_last_day.replace(day=1)
+
+    user_expenses = db.query(Expense).filter(
+        Expense.user_id == user_id,
+        Expense.date.between(previous_month_first_day, previous_month_last_day)
+    ).all()
+
+    return user_expenses
+
+
+def get_summary_per_custom_data(
+        db: Session,
+        user_id: int,
+        start_date: datetime,
+        end_date: datetime
+) -> list[Type[Expense]]:
+    user_expenses = db.query(Expense).filter(
+        Expense.user_id == user_id,
+        Expense.date.between(start_date, end_date)
+    ).all()
+
+    return user_expenses
