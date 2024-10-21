@@ -1,5 +1,6 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, Request
-from httpcore import request
 from sqlalchemy.orm import Session
 
 from dependenies import get_db
@@ -64,4 +65,47 @@ def get_expense_during_month(
         db=db,
         month_number=month,
         user_id=user_id
+    )
+
+
+@router.get("/summary/stats/last_week/")
+def get_expense_last_week(
+        request: Request,
+        db: Session = Depends(get_db)
+):
+    user_id = get_user_id(request)
+
+    return crud.get_summary_per_past_week(
+        db=db,
+        user_id=user_id
+    )
+
+
+@router.get("/summary/stats/last_month/")
+def get_expense_last_month(
+        request: Request,
+        db: Session = Depends(get_db)
+):
+    user_id = get_user_id(request)
+
+    return crud.get_summary_per_past_month(
+        db=db,
+        user_id=user_id
+    )
+
+
+@router.get("/summary/stats/{start_date}/{end_date}/")
+def get_expense_stats_per_custom_date(
+        request: Request,
+        start_date: datetime,
+        end_date: datetime,
+        db: Session = Depends(get_db)
+):
+    user_id = get_user_id(request)
+
+    return crud.get_summary_per_custom_data(
+        db=db,
+        user_id=user_id,
+        start_date=start_date,
+        end_date=end_date
     )
