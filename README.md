@@ -28,7 +28,6 @@ https://roadmap.sh/projects/expense-tracker-api
   - Python: The core language for building the backend services.
 
 
-
 ## how to run
 ```sh
 # Clone the repository
